@@ -9,6 +9,12 @@ app.engine('hbs', expressHbs ({
     defaultLayout: 'main.hbs',
 }));
 
+//static folders
+app.use(express.static(__dirname + '/public'));   //For CSS
+app.use(express.static(__dirname + '/clientSideJS'));
+
+
+
 app.get('/', (req, res) => {
     res.render('index.hbs');
 });
