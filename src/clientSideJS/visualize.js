@@ -1,4 +1,6 @@
 //===Coordinates represents api response
+var realCoordinates = null
+
 var coordinates = [
     [{x: 200, y: 300, collision: false}, {x: 432, y: 131, collision: false}, {x: 232, y: 732, collision: true}, {x: 350, y: 600, collision: false}, {x: 560, y: 21, collision: false}],
     [{x: 300, y: 200, collision: false}, {x: 323, y: 51, collision: false}, {x: 632, y: 100, collision: false}, {x: 350, y: 600, collision: true}, {x: 750, y: 500, collision: false}],
@@ -21,7 +23,11 @@ var nextButton = document.getElementById("next")
 var previousButton = document.getElementById("previous")
 
 //Write latest run done by mower
-updateCanvas(ctx, coordinates, currentPathIndex, pagination)
+
+getMowerData(pagination, (data) => {
+    realCoordinates = data
+    updateCanvas(ctx, coordinates, currentPathIndex, pagination)
+})
 
 //=======================================Next/Previous Buttons==========================================================
 nextButton.disabled = true
@@ -31,12 +37,12 @@ nextButton.addEventListener("click", function(event) {
     if(currentPathIndex < 4) {
         currentPathIndex += 1
         updateCanvas(ctx, coordinates, currentPathIndex, pagination)
-    } else if (currentPathIndex == 4 && pagination != 1) {
+    } else if (currentPathIndex == coordinates.length && pagination != 1) {
         currentPathIndex = 0
         pagination -= 1
     }
 
-    if(currentPathIndex == 4 && pagination == 1)  {
+    if(currentPathIndex == coordinates.length && pagination == 1)  {
         nextButton.disabled = true
     }
 
@@ -46,14 +52,16 @@ nextButton.addEventListener("click", function(event) {
 
 previousButton.addEventListener("click", function(event) {
     if (currentPathIndex == 0) {
-        //assume 5 paths are returned from API
-        currentPathIndex = 4
         pagination += 1
+        getMowerData(pagination, (data) => {
+            // realCoordinates = data       lägg till nya paths (data) i realCoordinates (ta inte bort dom gamla)
+            currentPathIndex = coordinates.length - 1
+            updateCanvas(ctx, coordinates, currentPathIndex)
+        })
         
-        updateCanvas(ctx, coordinates, currentPathIndex, pagination)
     } else if(currentPathIndex >= 0) {
         currentPathIndex -= 1
-        updateCanvas(ctx, coordinates, currentPathIndex, pagination)
+        updateCanvas(ctx, coordinates, currentPathIndex)
     }
 
     nextButton.disabled = false
@@ -65,38 +73,31 @@ previousButton.addEventListener("click", function(event) {
 //========================Functions for writing on canvas=============================================================
 
 //Runs in beginning of program and every time previous or next button have been clicked
-function updateCanvas(ctx, coordinates, currentPathIndex, pagination) {
+function updateCanvas(ctx, coordinates, currentPathIndex) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    getMowerData(pagination, function(data) {
-        console.log(data)
+    ctx.beginPath();
 
-        if (data != null) {
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    //Paint start circle
+    paintCircle(ctx, "green", MIDDLE_X, MIDDLE_Y)
 
-            ctx.beginPath();
-        
-            //Paint start circle
-            paintCircle(ctx, "green", MIDDLE_X, MIDDLE_Y)
-        
-            //Start in middle
-            ctx.moveTo(MIDDLE_X, MIDDLE_Y);
+    //Start in middle
+    ctx.moveTo(MIDDLE_X, MIDDLE_Y);
 
-            for (var i = 0; i < coordinates[currentPathIndex].length; i++) {
-                ctx.lineTo(coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"]);
-                ctx.moveTo(coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"]);
-                if (coordinates[currentPathIndex][i]["collision"]) {
-                    //Paint collisioon circle
-                    paintCircle(ctx, "blue", coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"])
-                } 
-                else if (i == coordinates[currentPathIndex].length - 1) {
-                    //Paint end circle
-                    paintCircle(ctx, "red", coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"])
-                }
-            }
-        
-            ctx.stroke();
+    for (var i = 0; i < coordinates[currentPathIndex].length; i++) {
+        ctx.lineTo(coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"]);
+        ctx.moveTo(coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"]);
+        if (coordinates[currentPathIndex][i]["collision"]) {
+            //Paint collisioon circle
+            paintCircle(ctx, "blue", coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"])
+        } 
+        else if (i == coordinates[currentPathIndex].length - 1) {
+            //Paint end circle
+            paintCircle(ctx, "red", coordinates[currentPathIndex][i]["x"], coordinates[currentPathIndex][i]["y"])
         }
-    });
+    }
+
+    ctx.stroke();
 }
 
 
@@ -110,9 +111,10 @@ function paintCircle(ctx, color, x, y) {
 
 //========================API handling=============================================================
 
-function getMowerData(pagination, callback) {   
+function getMowerData(pagination, callback) {  
+    console.log("run") 
     var http = new XMLHttpRequest();
-    var url = 'https://ims_api.supppee.workers.dev/api/coord/296843889070834181';
+    var url = 'https://ims_api.supppee.workers.dev/api/coord/297295112273134085';
 
     http.open("GET", url);
     http.send();
