@@ -33,6 +33,10 @@
     background-color: #666665;
 }
 
+#errorMessage {
+    color: red;
+}
+
 .whiteText {
     color: white;
 }
