@@ -59,7 +59,7 @@ nextButton.addEventListener("click", function(event) {
         pagination -= 1
     }
 
-    if(currentPathIndex == coordinates.length - 1 && pagination == 1)  {
+    if(currentPathIndex == coordinates.length - 1)  {
         nextButton.disabled = true
     }
 })
