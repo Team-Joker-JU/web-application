@@ -14,6 +14,7 @@ var previousButton = document.getElementById("previous")
 var refreshButton = document.getElementById("refresh")
 var pathCounter = document.getElementById("pathCounter")
 var loaderIcon = document.getElementById("loadIcon")
+var errorMessage = document.getElementById("errorMessage")
 
 //Write latest run done by mower
 //=========================================Init============================================================================
@@ -33,13 +34,20 @@ var pagination = 1
 //Visuals
 var counter = 1 //Only used for visuals
 loaderIcon.style.display = "none"
+showErrorMessage(false)
 
 //Get data initially to draw path on screen
 getMowerData(pagination, (data) => {
-    coordinates = data
-    currentPathIndex = data.length - 1
-    updatePathCounter(0)
-    updateCanvas(ctx, coordinates, currentPathIndex, pagination)
+    if (data.length != 0) {
+        coordinates = data.reverse()
+        currentPathIndex = data.length - 1
+        updatePathCounter(0)
+        updateCanvas(ctx, coordinates, currentPathIndex, pagination)
+    } else {
+        previousButton.disabled = true
+        nextButton.disabled = true
+        showErrorMessage(true)
+    }
 })
 
 //=======================================Next/Previous Buttons==========================================================
@@ -97,12 +105,19 @@ previousButton.addEventListener("click", function(event) {
 refreshButton.addEventListener("click", function(event) {
     pagination = 1;
     getMowerData(pagination, (data) => {
-        coordinates = data
-        currentPathIndex = data.length - 1
-        updatePathCounter(0)
-        previousButton.disabled = false
-        nextButton.disabled = true
-        updateCanvas(ctx, coordinates, currentPathIndex)
+        if (data.length != 0) {
+            coordinates = data.reverse()
+            currentPathIndex = data.length - 1
+            updatePathCounter(0)
+            previousButton.disabled = false
+            nextButton.disabled = true
+            showErrorMessage(false)
+            updateCanvas(ctx, coordinates, currentPathIndex)
+        } else {
+            previousButton.disabled = true
+            nextButton.disabled = true
+            showErrorMessage(true)
+        }
     })
 })
 
@@ -235,4 +250,8 @@ function toggleLoaderIcon() {
     else {
         loaderIcon.style.display = "none"
     }
+}
+
+function showErrorMessage(bool) {
+    errorMessage.style.display = (bool) ? "" : "none"
 }
