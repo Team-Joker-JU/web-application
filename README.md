@@ -1,3 +1,4 @@
 # web-application
 1. npm install
-2. nodemon .\main.js
+2. go to src folder
+3. nodemon .\main.js
