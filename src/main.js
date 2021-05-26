@@ -1,6 +1,5 @@
 const express = require('express');
 const expressHbs = require('express-handlebars');
-const visualize = require('./visualize');
 const PORT = 8080;
 const app = express();
 

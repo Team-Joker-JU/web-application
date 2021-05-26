@@ -1,6 +1,21 @@
-<canvas id="myCanvas" width="800" height="800" style="outline-style: solid;"></canvas>
-<button id="previous" style="width: 50px; height: 50px"><</button>
-<button id="next" style="width: 50px; height: 50px">></button>
-<div style="width: 70px; height: 20px; background: blue; color: white">Collision</div>
-<div style="width: 70px; height: 20px; background: green; color: white">Start</div>
-<div style="width: 70px; height: 20px; background: red; color: white">End</div>
+<div class="main">
+    <div class="content">
+        <h2 class="whiteText">Mower path visualization</h2>
+        <div>
+            <canvas id="myCanvas" width="800" height="800" style="outline-style: solid;"></canvas>
+            <div class="side-bar">
+                <div class="flexContainer">
+                    <p class="whiteText" id="pathCounter"></p>
+                    <div class="loader" id="loadIcon"></div>              
+                </div>
+                <button class="smallButton" id="previous"><</button>
+                <button class="smallButton" id="next">></button>
+                <button class="bigButton" id="refresh">Refresh</button>
+                <div class="color green">Start</div>
+                <div class="color blue">Collision</div>
+                <div class="color red">End</div>
+            </div>
+        </div>
+    </div>
+</div>
+
