@@ -1,6 +1,29 @@
 # Web application
 
 ## Dependencies
+<table border=1>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Homepage for org.
+        </th>
+    </tr>
+    <tr>
+        <td>Node.js</td>
+        <td>Environment to run javascript applications</td>
+        <td>https://nodejs.org/en/</td>
+    </tr>
+    <tr>
+        <td>npm</td>
+        <td>Node packet manager. Handles installation for every techonology within node applications</td>
+        <td>https://www.npmjs.com/</td>
+    </tr>
+</table>
 * Node.js
 * npm
 
