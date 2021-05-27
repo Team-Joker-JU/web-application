@@ -19,6 +19,11 @@
         <td>https://nodejs.org/en/</td>
     </tr>
     <tr>
+        <td>Express.js</td>
+        <td>Framework for Javascript web applications</td>
+        <td>https://expressjs.com/</td>
+    </tr>
+    <tr>
         <td>npm</td>
         <td>Node packet manager. Handles installation for every techonology within node applications</td>
         <td>https://www.npmjs.com/</td>
@@ -29,9 +34,8 @@
 Reads from the backend API and gets the mowers coordinates. With these coordinates we draw a map over the route the mower has traveled, if there is a collision this is marked on the map.
 
 ## Technologies
-* express
-* express-handlebars
-* nodemon
+* express-handlebars - Template system used to display data
+* nodemon - Allows for automatic restarts of the server when code is changed
 
 ## Installation
 1. `git clone https://github.com/Team-Joker-JU/web-application.git`
